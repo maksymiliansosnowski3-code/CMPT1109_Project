@@ -14,6 +14,8 @@ void playOneYear(int arr[][COL], int newArr[][COL]);
 void playGame(int arr[][COL], int newArr[][COL]);
 void addCells(int arr[][COL], int newArr[][COL]);
 void countCells(int arr[][COL]);
+int countLivingCells(int arr[][COL]);
+int countDeadCells(int arr[][COL]);
 void randomBoard(int arr[][COL]);
 void bestBoard(int arr[][COL], int newArr[][COL]);
 void displayResults(int arr[][COL]);
@@ -136,21 +138,42 @@ void playGame(int arr[][COL], int newArr[][COL]) {
 }
 
 void addCells(int arr[][COL], int newArr[][COL]) {
-    string input;
-    bool isNumber = false;
+    int numberOfCells;
 
-    while (!isNumber) {
-        cout << "How many cells would you like to add? \n";
-        cin >> input;
-        isNumber = true; 
-        for (int i = 0; i < input.length(); i++) {
-            if (!isdigit(input[i])) {
-                isNumber = false;
-                cout << "\nInvalid answer! ";
-                break;
-            }
-      }
+    cout << "How many cells would you like to add? ";
+    cin >> numberOfCells;
+
+    while (cin.fail() || numberOfCells <= 0) {
+        cin.clear();
+        cin.ignore(10000, '\n');
+
+        cout << "Invalid number. Please enter a positive number: ";
+        cin >> numberOfCells;
     }
+
+    // Check how many empty positions are availible
+    int deadCells = countDeadCells(arr);
+
+    if (numberOfCells > deadCells) {
+        cout << "There are not enough empty positions on the board.\n";
+        return;
+    }
+
+    int added = 0;
+
+    // Randomly find empty positions and make thrm alive
+    while (added < numberOfCells) {
+        int row = rand() % ROW;
+        int col = rand() % COL;
+
+        if (arr[row][col] == 0) {
+            arr[row][col] = 1;
+            added++;
+        }
+    }
+
+    cout << numberOfCells << " cells added successfully!\n";
+}
 
     int numberOfCells = stoi(input);
     cout << "Adding " << numberOfCells << " cells.\n";
@@ -159,17 +182,16 @@ void addCells(int arr[][COL], int newArr[][COL]) {
 
         for (int j = 0; j < ROW; j++) {
 
-
-
-
-
-
         }
      }
 }   
 
 void countCells(int arr[][COL]) {
+    int living = countLivingCells(arr);
+    int dead = countDeadCells(arr);
 
+    cout << "Living cells: " << living << endl;
+    cout << "Dead cells: " << dead << endl;
 }
 
 void randomBoard(int arr[][COL]) {
@@ -221,6 +243,8 @@ int countDeadCells(int arr[][COL])
 
     return total;
 }
+
+// Validate user menu choice input 
 int getMenuChoice()
 {
     int choice;
