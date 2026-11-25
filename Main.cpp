@@ -371,6 +371,7 @@ void bestBoard(int bestStartBoard[][COL], int bestAlive) {
         << bestAlive << " living cells:\n";
 
     displayBoard(bestStartBoard);
+
 }
 
 
